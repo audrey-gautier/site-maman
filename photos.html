@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Photos de Lou Pitchou Prats et Maison Prats : la maison, le jardin et le cadre à Audon." />
+  <meta name="description" content="Photos de Lou Pitchou Prats et Maison Prats : gîte, chambres, extérieur, piscine et spa." />
   <title>Photos — Lou Pitchou Prats et Maison Prats</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -25,16 +25,65 @@
   <main>
     <section id="photos">
       <h2>Galerie</h2>
-      <div class="galerie">
-        <img src="maison.jpg" alt="La maison aux volets bleus avec son jardin" />
-        <img src="lou_pitchou_prats_buste.jpg" alt="Danièle vous accueille au gîte" />
+
+      <div class="onglets" id="onglets-photos">
+        <button type="button" data-cat="gite" class="actif">Gîte</button>
+        <button type="button" data-cat="chambres">Chambres</button>
+        <button type="button" data-cat="exterieur">Extérieur</button>
+        <button type="button" data-cat="piscine">Piscine et SPA</button>
       </div>
-      <p>D'autres photos seront ajoutées prochainement.</p>
+
+      <div class="galerie" id="galerie"></div>
     </section>
   </main>
 
   <footer>
     <p>&copy; 2026 — Lou Pitchou Prats et Maison Prats</p>
   </footer>
+
+  <script>
+    // === À REMPLIR ===
+    // Pour chaque catégorie, ajouter les photos sous la forme :
+    //   { src: "nom-du-fichier.jpg", alt: "Description de la photo" }
+    var galeries = {
+      gite:      [],
+      chambres:  [],
+      exterieur: [],
+      piscine:   []
+    };
+
+    var categorieActive = "gite";
+
+    function afficheGalerie() {
+      var galerie = document.getElementById("galerie");
+      var photos = galeries[categorieActive];
+      galerie.innerHTML = "";
+      if (photos.length === 0) {
+        var vide = document.createElement("p");
+        vide.className = "galerie-vide";
+        vide.textContent = "Photos à venir prochainement.";
+        galerie.appendChild(vide);
+        return;
+      }
+      for (var i = 0; i < photos.length; i++) {
+        var img = document.createElement("img");
+        img.src = photos[i].src;
+        img.alt = photos[i].alt || "";
+        galerie.appendChild(img);
+      }
+    }
+
+    document.getElementById("onglets-photos").addEventListener("click", function (e) {
+      if (e.target.tagName !== "BUTTON") return;
+      categorieActive = e.target.getAttribute("data-cat");
+      var boutons = this.querySelectorAll("button");
+      for (var i = 0; i < boutons.length; i++) {
+        boutons[i].classList.toggle("actif", boutons[i] === e.target);
+      }
+      afficheGalerie();
+    });
+
+    afficheGalerie();
+  </script>
 </body>
 </html>
