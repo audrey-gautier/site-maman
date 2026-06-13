@@ -250,6 +250,28 @@ a {
   display: block;
 }
 
+.choix-logement {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.choix-logement button {
+  font: inherit;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--bleu-accent);
+  background: #fff;
+  color: var(--bleu-accent);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.choix-logement button.actif {
+  background: var(--bleu-accent);
+  color: #fff;
+}
+
 .legende {
   display: flex;
   gap: 1.5rem;

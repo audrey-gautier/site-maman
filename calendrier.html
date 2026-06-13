@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Calendrier des disponibilités de Lou Pitchou Prats et Maison Prats à Audon." />
+  <meta name="description" content="Calendrier des disponibilités du gîte et des chambres de Lou Pitchou Prats à Audon." />
   <title>Calendrier — Lou Pitchou Prats et Maison Prats</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -26,13 +26,22 @@
     <section id="calendrier">
       <h2>Calendrier des disponibilités</h2>
       <p>
-        Les périodes en rouge sont déjà réservées. Pour réserver une période
-        libre, <a href="index.html#contact">contactez-nous</a>.
+        Choisissez un logement pour voir ses disponibilités. Les périodes en
+        rouge sont déjà réservées. Pour réserver une période libre,
+        <a href="index.html#contact">contactez-nous</a>.
       </p>
+
+      <div class="choix-logement" id="choix">
+        <button type="button" data-logement="gite" class="actif">Le gîte</button>
+        <button type="button" data-logement="chambre1">Chambre 1</button>
+        <button type="button" data-logement="chambre2">Chambre 2</button>
+      </div>
+
       <div class="legende">
         <span><span class="pastille libre"></span> Disponible</span>
         <span><span class="pastille reserve"></span> Réservé</span>
       </div>
+
       <div id="cal"></div>
     </section>
   </main>
@@ -42,16 +51,24 @@
   </footer>
 
   <script>
-    // Périodes réservées : ajouter une ligne par réservation.
-    // Format : { debut: "AAAA-MM-JJ", fin: "AAAA-MM-JJ" }  (fin = dernière nuit incluse)
-    var reservations = [
-      // { debut: "2026-07-10", fin: "2026-07-17" },
-    ];
+    // === À REMPLIR ===
+    // Pour chaque logement, ajouter une ligne par période réservée :
+    //   { debut: "AAAA-MM-JJ", fin: "AAAA-MM-JJ" }   (fin = dernière nuit incluse)
+    var logements = {
+      gite:     { nom: "Le gîte",   reservations: [
+        // { debut: "2026-07-10", fin: "2026-07-17" },
+      ] },
+      chambre1: { nom: "Chambre 1", reservations: [
+      ] },
+      chambre2: { nom: "Chambre 2", reservations: [
+      ] }
+    };
 
     var MOIS = ["janvier","février","mars","avril","mai","juin","juillet",
                 "août","septembre","octobre","novembre","décembre"];
     var JOURS = ["L","M","M","J","V","S","D"];
     var NB_MOIS = 6;
+    var logementActif = "gite";
 
     function aaaammjj(d) {
       var m = ("0" + (d.getMonth() + 1)).slice(-2);
@@ -60,9 +77,10 @@
     }
 
     function estReserve(d) {
+      var resas = logements[logementActif].reservations;
       var s = aaaammjj(d);
-      for (var i = 0; i < reservations.length; i++) {
-        if (s >= reservations[i].debut && s <= reservations[i].fin) return true;
+      for (var i = 0; i < resas.length; i++) {
+        if (s >= resas[i].debut && s <= resas[i].fin) return true;
       }
       return false;
     }
@@ -86,8 +104,7 @@
       }
       table.appendChild(thead);
 
-      var premier = new Date(annee, mois, 1);
-      var decalage = (premier.getDay() + 6) % 7; // lundi = 0
+      var decalage = (new Date(annee, mois, 1).getDay() + 6) % 7; // lundi = 0
       var nbJours = new Date(annee, mois + 1, 0).getDate();
 
       var jour = 1;
@@ -117,8 +134,9 @@
       return div;
     }
 
-    (function () {
+    function afficheCalendrier() {
       var cal = document.getElementById("cal");
+      cal.innerHTML = "";
       var maintenant = new Date();
       var aujourdhui = new Date(maintenant.getFullYear(), maintenant.getMonth(), maintenant.getDate());
       var annee = maintenant.getFullYear();
@@ -128,7 +146,19 @@
         mois++;
         if (mois > 11) { mois = 0; annee++; }
       }
-    })();
+    }
+
+    document.getElementById("choix").addEventListener("click", function (e) {
+      if (e.target.tagName !== "BUTTON") return;
+      logementActif = e.target.getAttribute("data-logement");
+      var boutons = this.querySelectorAll("button");
+      for (var i = 0; i < boutons.length; i++) {
+        boutons[i].classList.toggle("actif", boutons[i] === e.target);
+      }
+      afficheCalendrier();
+    });
+
+    afficheCalendrier();
   </script>
 </body>
 </html>
