@@ -42,8 +42,9 @@ header h1 {
 
 nav {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 0.75rem 1.5rem;
   padding: 1rem;
   background: white;
   border-bottom: 1px solid var(--bleu-bordure);
@@ -233,6 +234,90 @@ a {
   .regle-titre {
     flex-basis: auto;
   }
+}
+
+.galerie {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.galerie img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.legende {
+  display: flex;
+  gap: 1.5rem;
+  margin: 0.5rem 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+.pastille {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-right: 0.3rem;
+}
+
+.pastille.libre {
+  background: #fff;
+  border: 1px solid #2e8b57;
+}
+
+.pastille.reserve {
+  background: #f8d7da;
+  border: 1px solid #842029;
+}
+
+#cal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2rem;
+}
+
+.mois h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: var(--bleu-fonce);
+  text-transform: capitalize;
+}
+
+table.cal {
+  border-collapse: collapse;
+}
+
+.cal th,
+.cal td {
+  width: 2.2rem;
+  height: 2.2rem;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.cal th {
+  color: #888;
+  font-weight: 600;
+}
+
+.cal td.libre {
+  border: 1px solid var(--bleu-bordure);
+}
+
+.cal td.reserve {
+  background: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5b9bf;
+}
+
+.cal td.passe {
+  color: #ccc;
 }
 
 footer {
