@@ -132,9 +132,13 @@ a {
 }
 
 .equipements {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 1.5rem 2rem;
+  columns: 3 230px;
+  column-gap: 2rem;
+}
+
+.categorie {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
 }
 
 .categorie h3 {
