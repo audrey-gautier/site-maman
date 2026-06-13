@@ -21,9 +21,12 @@ body {
 
 header {
   text-align: center;
-  padding: 3rem 1rem;
-  background: var(--bleu-ciel);
-  color: var(--bleu-fonce);
+  padding: 6rem 1rem;
+  background-image: linear-gradient(rgba(12, 74, 110, 0.45), rgba(12, 74, 110, 0.45)), url("maison.jpg");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
 }
 
 header h1 {
