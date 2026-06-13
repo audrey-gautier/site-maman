@@ -84,6 +84,31 @@ a {
   color: var(--bleu-accent);
 }
 
+.qui-suis-je-contenu {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.photo-portrait {
+  width: 220px;
+  max-width: 40%;
+  height: auto;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .qui-suis-je-contenu {
+    flex-direction: column;
+  }
+
+  .photo-portrait {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
 footer {
   text-align: center;
   padding: 1.5rem;
