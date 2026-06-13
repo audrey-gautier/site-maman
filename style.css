@@ -1,5 +1,7 @@
 :root {
   --rose: #d6336c;
+  --bleu-ciel: #aadcf2;
+  --bleu-fonce: #0c4a6e;
   --fond: #fff5f7;
   --texte: #333;
 }
@@ -19,8 +21,8 @@ body {
 header {
   text-align: center;
   padding: 3rem 1rem;
-  background: var(--rose);
-  color: white;
+  background: var(--bleu-ciel);
+  color: var(--bleu-fonce);
 }
 
 header h1 {
