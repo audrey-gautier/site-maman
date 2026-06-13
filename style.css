@@ -250,14 +250,16 @@ a {
   display: block;
 }
 
-.choix-logement {
+.choix-logement,
+.onglets {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   margin: 1rem 0;
 }
 
-.choix-logement button {
+.choix-logement button,
+.onglets button {
   font: inherit;
   padding: 0.4rem 1rem;
   border: 1px solid var(--bleu-accent);
@@ -267,9 +269,15 @@ a {
   cursor: pointer;
 }
 
-.choix-logement button.actif {
+.choix-logement button.actif,
+.onglets button.actif {
   background: var(--bleu-accent);
   color: #fff;
+}
+
+.galerie-vide {
+  color: #888;
+  font-style: italic;
 }
 
 .legende {
