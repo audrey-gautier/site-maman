@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calendrier des disponibilités de Lou Pitchou Prats et Maison Prats à Audon." />
+  <title>Calendrier — Lou Pitchou Prats et Maison Prats</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Calendrier</h1>
+    <p class="sous-titre">Nos disponibilités</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Présentation</a>
+    <a href="lou-pitchou-prats.html">🏡 Lou Pitchou Prats</a>
+    <a href="#">🏡 Maison Prats</a>
+    <a href="nous-situer.html">📍 Nous situer</a>
+    <a href="calendrier.html" class="actif">📅 Calendrier</a>
+    <a href="photos.html">📷 Photos</a>
+  </nav>
+
+  <main>
+    <section id="calendrier">
+      <h2>Calendrier des disponibilités</h2>
+      <p>
+        Les périodes en rouge sont déjà réservées. Pour réserver une période
+        libre, <a href="index.html#contact">contactez-nous</a>.
+      </p>
+      <div class="legende">
+        <span><span class="pastille libre"></span> Disponible</span>
+        <span><span class="pastille reserve"></span> Réservé</span>
+      </div>
+      <div id="cal"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 — Lou Pitchou Prats et Maison Prats</p>
+  </footer>
+
+  <script>
+    // Périodes réservées : ajouter une ligne par réservation.
+    // Format : { debut: "AAAA-MM-JJ", fin: "AAAA-MM-JJ" }  (fin = dernière nuit incluse)
+    var reservations = [
+      // { debut: "2026-07-10", fin: "2026-07-17" },
+    ];
+
+    var MOIS = ["janvier","février","mars","avril","mai","juin","juillet",
+                "août","septembre","octobre","novembre","décembre"];
+    var JOURS = ["L","M","M","J","V","S","D"];
+    var NB_MOIS = 6;
+
+    function aaaammjj(d) {
+      var m = ("0" + (d.getMonth() + 1)).slice(-2);
+      var j = ("0" + d.getDate()).slice(-2);
+      return d.getFullYear() + "-" + m + "-" + j;
+    }
+
+    function estReserve(d) {
+      var s = aaaammjj(d);
+      for (var i = 0; i < reservations.length; i++) {
+        if (s >= reservations[i].debut && s <= reservations[i].fin) return true;
+      }
+      return false;
+    }
+
+    function construitMois(annee, mois, aujourdhui) {
+      var div = document.createElement("div");
+      div.className = "mois";
+
+      var titre = document.createElement("h3");
+      titre.textContent = MOIS[mois] + " " + annee;
+      div.appendChild(titre);
+
+      var table = document.createElement("table");
+      table.className = "cal";
+
+      var thead = document.createElement("tr");
+      for (var k = 0; k < 7; k++) {
+        var th = document.createElement("th");
+        th.textContent = JOURS[k];
+        thead.appendChild(th);
+      }
+      table.appendChild(thead);
+
+      var premier = new Date(annee, mois, 1);
+      var decalage = (premier.getDay() + 6) % 7; // lundi = 0
+      var nbJours = new Date(annee, mois + 1, 0).getDate();
+
+      var jour = 1;
+      for (var ligne = 0; ligne < 6 && jour <= nbJours; ligne++) {
+        var tr = document.createElement("tr");
+        for (var col = 0; col < 7; col++) {
+          var td = document.createElement("td");
+          if ((ligne === 0 && col < decalage) || jour > nbJours) {
+            td.className = "vide";
+          } else {
+            var d = new Date(annee, mois, jour);
+            td.textContent = jour;
+            if (d < aujourdhui) {
+              td.className = "passe";
+            } else if (estReserve(d)) {
+              td.className = "reserve";
+            } else {
+              td.className = "libre";
+            }
+            jour++;
+          }
+          tr.appendChild(td);
+        }
+        table.appendChild(tr);
+      }
+      div.appendChild(table);
+      return div;
+    }
+
+    (function () {
+      var cal = document.getElementById("cal");
+      var maintenant = new Date();
+      var aujourdhui = new Date(maintenant.getFullYear(), maintenant.getMonth(), maintenant.getDate());
+      var annee = maintenant.getFullYear();
+      var mois = maintenant.getMonth();
+      for (var i = 0; i < NB_MOIS; i++) {
+        cal.appendChild(construitMois(annee, mois, aujourdhui));
+        mois++;
+        if (mois > 11) { mois = 0; annee++; }
+      }
+    })();
+  </script>
+</body>
+</html>
