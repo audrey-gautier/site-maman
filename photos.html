@@ -33,6 +33,8 @@
         <button type="button" data-cat="piscine">Piscine et SPA</button>
       </div>
 
+      <div class="onglets sous-onglets" id="sous-onglets"></div>
+
       <div class="galerie" id="galerie"></div>
     </section>
   </main>
@@ -49,8 +51,11 @@
     // === À REMPLIR ===
     // Pour chaque catégorie, ajouter les photos sous la forme :
     //   { src: "nom-du-fichier.jpg", alt: "Description de la photo" }
+    // === À REMPLIR ===
+    //  - type "simple"  : { type: "simple",  photos: [ {src, alt}, ... ] }
+    //  - type "groupes" : { type: "groupes", groupes: [ { nom, photos: [...] }, ... ] }
     var galeries = {
-      gite: [
+      gite: { type: "simple", photos: [
         { src: "Gite/gite-01.jpg", alt: "Le gîte" },
         { src: "Gite/gite-02.jpg", alt: "Le gîte" },
         { src: "Gite/gite-03.jpg", alt: "Le gîte" },
@@ -62,19 +67,22 @@
         { src: "Gite/gite-09.jpg", alt: "Le gîte" },
         { src: "Gite/gite-10.jpg", alt: "Le gîte" },
         { src: "Gite/gite-11.jpg", alt: "Le gîte" }
-      ],
-      chambres:  [],
-      exterieur: [],
-      piscine:   []
+      ] },
+      chambres: { type: "groupes", groupes: [
+        { nom: "Chambre 1", photos: [] },
+        { nom: "Chambre 2", photos: [] }
+      ] },
+      exterieur: { type: "simple", photos: [] },
+      piscine:   { type: "simple", photos: [] }
     };
 
     var categorieActive = "gite";
+    var sousOngletActif = 0;
 
-    function afficheGalerie() {
+    function rendPhotos(photos) {
       var galerie = document.getElementById("galerie");
-      var photos = galeries[categorieActive];
       galerie.innerHTML = "";
-      if (photos.length === 0) {
+      if (!photos || photos.length === 0) {
         var vide = document.createElement("p");
         vide.className = "galerie-vide";
         vide.textContent = "Photos à venir prochainement.";
@@ -89,9 +97,34 @@
       }
     }
 
+    function afficheGalerie() {
+      var cat = galeries[categorieActive];
+      var sous = document.getElementById("sous-onglets");
+      sous.innerHTML = "";
+      if (cat.type === "groupes") {
+        sous.style.display = "flex";
+        cat.groupes.forEach(function (groupe, idx) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.textContent = groupe.nom;
+          if (idx === sousOngletActif) b.classList.add("actif");
+          b.addEventListener("click", function () {
+            sousOngletActif = idx;
+            afficheGalerie();
+          });
+          sous.appendChild(b);
+        });
+        rendPhotos(cat.groupes[sousOngletActif].photos);
+      } else {
+        sous.style.display = "none";
+        rendPhotos(cat.photos);
+      }
+    }
+
     document.getElementById("onglets-photos").addEventListener("click", function (e) {
       if (e.target.tagName !== "BUTTON") return;
       categorieActive = e.target.getAttribute("data-cat");
+      sousOngletActif = 0;
       var boutons = this.querySelectorAll("button");
       for (var i = 0; i < boutons.length; i++) {
         boutons[i].classList.toggle("actif", boutons[i] === e.target);
