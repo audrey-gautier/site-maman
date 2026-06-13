@@ -31,6 +31,7 @@
         <button type="button" data-cat="chambres">Chambres</button>
         <button type="button" data-cat="exterieur">Extérieur</button>
         <button type="button" data-cat="piscine">Piscine et SPA</button>
+        <button type="button" data-cat="petitdej">Petit déjeuner</button>
       </div>
 
       <div class="onglets sous-onglets" id="sous-onglets"></div>
@@ -84,7 +85,10 @@
         ] }
       ] },
       exterieur: { type: "simple", photos: [] },
-      piscine:   { type: "simple", photos: [] }
+      piscine:   { type: "simple", photos: [] },
+      petitdej:  { type: "simple", photos: [
+        { src: "petit-dejeuner/petit-dejeuner-01.jpg", alt: "Petit déjeuner" }
+      ] }
     };
 
     var categorieActive = "gite";
