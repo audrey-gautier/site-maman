@@ -1,6 +1,9 @@
 :root {
-  --rose: #d6336c;
-  --fond: #fff5f7;
+  --bleu-ciel: #aadcf2;
+  --bleu-fonce: #0c4a6e;
+  --bleu-accent: #1684c2;
+  --bleu-bordure: #cdeaf7;
+  --fond: #f2f9fd;
   --texte: #333;
 }
 
@@ -19,8 +22,8 @@ body {
 header {
   text-align: center;
   padding: 3rem 1rem;
-  background: var(--rose);
-  color: white;
+  background: var(--bleu-ciel);
+  color: var(--bleu-fonce);
 }
 
 header h1 {
@@ -40,13 +43,13 @@ nav {
   gap: 1.5rem;
   padding: 1rem;
   background: white;
-  border-bottom: 1px solid #f0d4dc;
+  border-bottom: 1px solid var(--bleu-bordure);
 }
 
 nav a {
   text-decoration: none;
   font-weight: 600;
-  color: var(--rose);
+  color: var(--bleu-accent);
   padding: 0.3rem 0.2rem;
 }
 
@@ -55,7 +58,7 @@ nav a:hover {
 }
 
 nav a.actif {
-  border-bottom: 2px solid var(--rose);
+  border-bottom: 2px solid var(--bleu-accent);
 }
 
 main {
@@ -69,13 +72,13 @@ section {
 }
 
 h2 {
-  color: var(--rose);
-  border-bottom: 2px solid var(--rose);
+  color: var(--bleu-accent);
+  border-bottom: 2px solid var(--bleu-accent);
   padding-bottom: 0.3rem;
 }
 
 a {
-  color: var(--rose);
+  color: var(--bleu-accent);
 }
 
 footer {
