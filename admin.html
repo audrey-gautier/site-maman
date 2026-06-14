@@ -18,8 +18,8 @@
       <h2>Connexion</h2>
       <form id="form-login" autocomplete="off">
         <p>
-          <label for="login-user">Identifiant</label><br />
-          <input type="text" id="login-user" />
+          <label for="login-user">Email</label><br />
+          <input type="email" id="login-user" />
         </p>
         <p>
           <label for="login-pass">Mot de passe</label><br />
@@ -27,7 +27,7 @@
         </p>
         <button type="submit">Se connecter</button>
         <span id="login-erreur" class="login-erreur" style="display:none;">
-          Identifiant ou mot de passe incorrect.
+          Email ou mot de passe incorrect.
         </span>
       </form>
       <p><a href="index.html">← Retour au site</a></p>
@@ -36,8 +36,8 @@
     <section id="admin-contenu" style="display:none;">
       <p class="admin-info">
         Choisissez un logement, puis <strong>cliquez sur un jour</strong> pour le
-        bloquer (rouge) ou le débloquer. Vos modifications sont enregistrées
-        automatiquement et apparaissent dans
+        bloquer (rouge) ou le débloquer. Les changements sont enregistrés
+        <strong>en ligne</strong> et visibles aussitôt dans
         <a href="calendrier.html">le calendrier du site</a>.
       </p>
 
@@ -55,17 +55,8 @@
       <div id="cal"></div>
 
       <div class="admin-actions">
-        <button type="button" id="publier">Exporter le code (publication)</button>
-        <button type="button" id="reinit">Réinitialiser depuis la version publiée</button>
         <button type="button" id="deconnexion">Se déconnecter</button>
       </div>
-
-      <p class="admin-info" id="publier-aide" style="display:none;">
-        Code copié&nbsp;! Envoyez-le à votre assistant (ou collez-le dans le
-        fichier <code>reservations.js</code>) pour le mettre en ligne pour les
-        visiteurs.
-      </p>
-      <textarea id="export" rows="8" style="display:none; width:100%; font-family:monospace;"></textarea>
     </section>
   </main>
 
@@ -73,39 +64,41 @@
     <p>&copy; 2026 — Lou Pitchou Prats et Maison Prats</p>
   </footer>
 
-  <script src="reservations.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <script src="calendrier.js"></script>
   <script>
-    // ===== IDENTIFIANTS ADMIN =====
-    // À remplacer par vos identifiants (donnés par Audrey).
-    var ADMIN_USER = "admin";
-    var ADMIN_PASS = "changeme";
-
-    var reservations = calChargeReservations();
-    ["gite", "chambre1", "chambre2"].forEach(function (k) {
-      if (!reservations[k]) reservations[k] = [];
-    });
+    var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    var reservations = { gite: [], chambre1: [], chambre2: [] };
     var logementActif = "gite";
-
-    function sauvegarde() {
-      localStorage.setItem("reservations", JSON.stringify(reservations));
-    }
+    var enCours = false;
 
     function estReserve(ds) {
       return reservations[logementActif].indexOf(ds) !== -1;
     }
 
-    function bascule(ds) {
-      var arr = reservations[logementActif];
-      var i = arr.indexOf(ds);
-      if (i === -1) { arr.push(ds); } else { arr.splice(i, 1); }
-      arr.sort();
-      sauvegarde();
-      affiche();
-    }
-
     function affiche() {
       calGenere(document.getElementById("cal"), 6, estReserve, bascule);
+    }
+
+    function bascule(ds) {
+      if (enCours) return;
+      var arr = reservations[logementActif];
+      var i = arr.indexOf(ds);
+      enCours = true;
+      if (i === -1) {
+        sb.from("reservations").insert({ logement: logementActif, jour: ds }).then(function (res) {
+          enCours = false;
+          if (res.error) { alert("Erreur : " + res.error.message); return; }
+          arr.push(ds); arr.sort(); affiche();
+        });
+      } else {
+        sb.from("reservations").delete().eq("logement", logementActif).eq("jour", ds).then(function (res) {
+          enCours = false;
+          if (res.error) { alert("Erreur : " + res.error.message); return; }
+          arr.splice(i, 1); affiche();
+        });
+      }
     }
 
     document.getElementById("choix").addEventListener("click", function (e) {
@@ -118,55 +111,44 @@
       affiche();
     });
 
-    document.getElementById("publier").addEventListener("click", function () {
-      var txt = "var RESERVATIONS = " + JSON.stringify(reservations, null, 2) + ";\n";
-      var zone = document.getElementById("export");
-      zone.value = txt;
-      zone.style.display = "block";
-      zone.select();
-      try { navigator.clipboard.writeText(txt); } catch (e) {}
-      document.getElementById("publier-aide").style.display = "block";
-    });
-
-    document.getElementById("reinit").addEventListener("click", function () {
-      if (!confirm("Effacer vos modifications locales et revenir à la version publiée ?")) return;
-      localStorage.removeItem("reservations");
-      reservations = calChargeReservations();
-      ["gite", "chambre1", "chambre2"].forEach(function (k) {
-        if (!reservations[k]) reservations[k] = [];
-      });
-      document.getElementById("export").style.display = "none";
-      document.getElementById("publier-aide").style.display = "none";
-      affiche();
-    });
-
     document.getElementById("deconnexion").addEventListener("click", function () {
-      sessionStorage.removeItem("admin-auth");
-      location.reload();
+      sb.auth.signOut().then(function () { location.reload(); });
     });
+
+    function chargeEtAffiche() {
+      sb.from("reservations").select("logement,jour").then(function (res) {
+        reservations = { gite: [], chambre1: [], chambre2: [] };
+        if (!res.error && res.data) {
+          res.data.forEach(function (r) {
+            if (!reservations[r.logement]) reservations[r.logement] = [];
+            reservations[r.logement].push(r.jour);
+          });
+        }
+        affiche();
+      });
+    }
 
     function ouvrirAdmin() {
       document.getElementById("admin-login").style.display = "none";
       document.getElementById("admin-contenu").style.display = "block";
-      affiche();
+      chargeEtAffiche();
     }
 
     document.getElementById("form-login").addEventListener("submit", function (e) {
       e.preventDefault();
-      var u = document.getElementById("login-user").value;
-      var p = document.getElementById("login-pass").value;
-      if (u === ADMIN_USER && p === ADMIN_PASS) {
-        sessionStorage.setItem("admin-auth", "1");
-        document.getElementById("login-erreur").style.display = "none";
+      var email = document.getElementById("login-user").value;
+      var pass = document.getElementById("login-pass").value;
+      var erreur = document.getElementById("login-erreur");
+      erreur.style.display = "none";
+      sb.auth.signInWithPassword({ email: email, password: pass }).then(function (res) {
+        if (res.error) { erreur.style.display = "inline"; return; }
         ouvrirAdmin();
-      } else {
-        document.getElementById("login-erreur").style.display = "inline";
-      }
+      });
     });
 
-    if (sessionStorage.getItem("admin-auth") === "1") {
-      ouvrirAdmin();
-    }
+    sb.auth.getSession().then(function (res) {
+      if (res.data && res.data.session) ouvrirAdmin();
+    });
   </script>
 </body>
 </html>

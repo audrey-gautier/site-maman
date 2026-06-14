@@ -51,10 +51,12 @@
     <p>&copy; 2026 — Lou Pitchou Prats et Maison Prats</p>
   </footer>
 
-  <script src="reservations.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <script src="calendrier.js"></script>
   <script>
-    var reservations = calChargeReservations();
+    var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    var reservations = { gite: [], chambre1: [], chambre2: [] };
     var logementActif = "gite";
 
     function estReserve(ds) {
@@ -76,6 +78,16 @@
     });
 
     afficheCalendrier();
+
+    sb.from("reservations").select("logement,jour").then(function (res) {
+      if (res.error) { console.error(res.error); return; }
+      reservations = { gite: [], chambre1: [], chambre2: [] };
+      res.data.forEach(function (r) {
+        if (!reservations[r.logement]) reservations[r.logement] = [];
+        reservations[r.logement].push(r.jour);
+      });
+      afficheCalendrier();
+    });
   </script>
 </body>
 </html>
