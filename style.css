@@ -364,6 +364,39 @@ a {
   font-style: italic;
 }
 
+.menu-pdj {
+  margin-bottom: 1.5rem;
+}
+
+.menu-pdj-titre {
+  text-align: center;
+  color: var(--bleu-accent);
+}
+
+.menu-pdj-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem 1.5rem;
+}
+
+.menu-pdj-cols h4 {
+  margin: 0 0 0.3rem;
+  color: var(--bleu-fonce);
+  border-bottom: 1px solid var(--bleu-bordure);
+  padding-bottom: 0.2rem;
+}
+
+.menu-pdj-cols ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-pdj-cols li {
+  padding: 0.15rem 0;
+  font-size: 0.95rem;
+}
+
 .legende {
   display: flex;
   gap: 1.5rem;
