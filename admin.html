@@ -34,25 +34,58 @@
     </section>
 
     <section id="admin-contenu" style="display:none;">
-      <p class="admin-info">
-        Choisissez un logement, puis <strong>cliquez sur un jour</strong> pour le
-        bloquer (rouge) ou le débloquer. Les changements sont enregistrés
-        <strong>en ligne</strong> et visibles aussitôt dans
-        <a href="calendrier.html">le calendrier du site</a>.
-      </p>
-
-      <div class="choix-logement" id="choix">
-        <button type="button" data-logement="gite" class="actif">Le gîte</button>
-        <button type="button" data-logement="chambre1">Chambre 1</button>
-        <button type="button" data-logement="chambre2">Chambre 2</button>
+      <div class="choix-logement" id="admin-onglets">
+        <button type="button" data-panel="calendrier" class="actif">Calendrier</button>
+        <button type="button" data-panel="tarifs">Tarifs</button>
       </div>
 
-      <div class="legende">
-        <span><span class="pastille libre"></span> Disponible</span>
-        <span><span class="pastille reserve"></span> Réservé</span>
+      <div id="panel-calendrier">
+        <p class="admin-info">
+          Choisissez un logement, puis <strong>cliquez sur un jour</strong> pour le
+          bloquer (rouge) ou le débloquer. Enregistré <strong>en ligne</strong>,
+          visible aussitôt dans <a href="calendrier.html">le calendrier du site</a>.
+        </p>
+
+        <div class="choix-logement" id="choix">
+          <button type="button" data-logement="gite" class="actif">Le gîte</button>
+          <button type="button" data-logement="chambre1">Chambre 1</button>
+          <button type="button" data-logement="chambre2">Chambre 2</button>
+        </div>
+
+        <div class="legende">
+          <span><span class="pastille libre"></span> Disponible</span>
+          <span><span class="pastille reserve"></span> Réservé</span>
+        </div>
+
+        <div id="cal"></div>
       </div>
 
-      <div id="cal"></div>
+      <div id="panel-tarifs" style="display:none;">
+        <p class="admin-info">
+          Modifiez les tarifs puis cliquez <strong>Enregistrer</strong>. Les
+          changements sont visibles aussitôt sur
+          <a href="tarifs.html">la page Tarifs</a>.
+        </p>
+        <form id="form-tarifs" class="form-tarifs" autocomplete="off">
+          <h3>Gîte</h3>
+          <label>Basse saison<br /><input type="text" id="t-gite_basse" /></label>
+          <label>Haute saison<br /><input type="text" id="t-gite_haute" /></label>
+          <label>Conditions<br /><input type="text" id="t-gite_conditions" /></label>
+
+          <h3>Chambres</h3>
+          <label>Basse saison<br /><input type="text" id="t-ch_basse" /></label>
+          <label>Haute saison<br /><input type="text" id="t-ch_haute" /></label>
+          <label>Repas du soir<br /><input type="text" id="t-ch_repas" /></label>
+
+          <h3>Commun</h3>
+          <label>Paiement<br /><input type="text" id="t-paiement" /></label>
+
+          <div class="admin-actions">
+            <button type="submit">Enregistrer les tarifs</button>
+            <span id="t-message" class="tarifs-message"></span>
+          </div>
+        </form>
+      </div>
 
       <div class="admin-actions">
         <button type="button" id="deconnexion">Se déconnecter</button>
@@ -128,10 +161,59 @@
       });
     }
 
+    var CLES_TARIFS = ["gite_basse", "gite_haute", "gite_conditions", "ch_basse", "ch_haute", "ch_repas", "paiement"];
+    var DEFAUTS_TARIFS = {
+      gite_basse: "75 € / nuit",
+      gite_haute: "90 € / nuit",
+      gite_conditions: "Pour 4 à 5 personnes — minimum 2 nuits.",
+      ch_basse: "60 € / nuit, petit déjeuner inclus",
+      ch_haute: "60 € / nuit, petit déjeuner inclus",
+      ch_repas: "Un repas du soir peut être préparé sur demande faite à l'avance, au prix de 15 €.",
+      paiement: "Paiement : chèques, espèces, carte bleue."
+    };
+
+    function chargeTarifs() {
+      sb.from("tarifs").select("cle,valeur").then(function (res) {
+        var vals = {};
+        if (!res.error && res.data) {
+          res.data.forEach(function (r) { vals[r.cle] = r.valeur; });
+        }
+        CLES_TARIFS.forEach(function (cle) {
+          var input = document.getElementById("t-" + cle);
+          if (input) input.value = (vals[cle] != null ? vals[cle] : DEFAUTS_TARIFS[cle]);
+        });
+      });
+    }
+
+    document.getElementById("form-tarifs").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var lignes = CLES_TARIFS.map(function (cle) {
+        return { cle: cle, valeur: document.getElementById("t-" + cle).value };
+      });
+      var msg = document.getElementById("t-message");
+      msg.textContent = "Enregistrement…";
+      sb.from("tarifs").upsert(lignes).then(function (res) {
+        if (res.error) { msg.textContent = "Erreur : " + res.error.message; return; }
+        msg.textContent = "Enregistré ✅";
+      });
+    });
+
+    document.getElementById("admin-onglets").addEventListener("click", function (e) {
+      if (e.target.tagName !== "BUTTON") return;
+      var panel = e.target.getAttribute("data-panel");
+      document.getElementById("panel-calendrier").style.display = (panel === "calendrier") ? "block" : "none";
+      document.getElementById("panel-tarifs").style.display = (panel === "tarifs") ? "block" : "none";
+      var boutons = this.querySelectorAll("button");
+      for (var i = 0; i < boutons.length; i++) {
+        boutons[i].classList.toggle("actif", boutons[i] === e.target);
+      }
+    });
+
     function ouvrirAdmin() {
       document.getElementById("admin-login").style.display = "none";
       document.getElementById("admin-contenu").style.display = "block";
       chargeEtAffiche();
+      chargeTarifs();
     }
 
     document.getElementById("form-login").addEventListener("submit", function (e) {
