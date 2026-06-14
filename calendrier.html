@@ -51,102 +51,18 @@
     <p>&copy; 2026 — Lou Pitchou Prats et Maison Prats</p>
   </footer>
 
+  <script src="reservations.js"></script>
+  <script src="calendrier.js"></script>
   <script>
-    // === À REMPLIR ===
-    // Pour chaque logement, ajouter une ligne par période réservée :
-    //   { debut: "AAAA-MM-JJ", fin: "AAAA-MM-JJ" }   (fin = dernière nuit incluse)
-    var logements = {
-      gite:     { nom: "Le gîte",   reservations: [
-        // { debut: "2026-07-10", fin: "2026-07-17" },
-      ] },
-      chambre1: { nom: "Chambre 1", reservations: [
-      ] },
-      chambre2: { nom: "Chambre 2", reservations: [
-      ] }
-    };
-
-    var MOIS = ["janvier","février","mars","avril","mai","juin","juillet",
-                "août","septembre","octobre","novembre","décembre"];
-    var JOURS = ["L","M","M","J","V","S","D"];
-    var NB_MOIS = 6;
+    var reservations = calChargeReservations();
     var logementActif = "gite";
 
-    function aaaammjj(d) {
-      var m = ("0" + (d.getMonth() + 1)).slice(-2);
-      var j = ("0" + d.getDate()).slice(-2);
-      return d.getFullYear() + "-" + m + "-" + j;
-    }
-
-    function estReserve(d) {
-      var resas = logements[logementActif].reservations;
-      var s = aaaammjj(d);
-      for (var i = 0; i < resas.length; i++) {
-        if (s >= resas[i].debut && s <= resas[i].fin) return true;
-      }
-      return false;
-    }
-
-    function construitMois(annee, mois, aujourdhui) {
-      var div = document.createElement("div");
-      div.className = "mois";
-
-      var titre = document.createElement("h3");
-      titre.textContent = MOIS[mois] + " " + annee;
-      div.appendChild(titre);
-
-      var table = document.createElement("table");
-      table.className = "cal";
-
-      var thead = document.createElement("tr");
-      for (var k = 0; k < 7; k++) {
-        var th = document.createElement("th");
-        th.textContent = JOURS[k];
-        thead.appendChild(th);
-      }
-      table.appendChild(thead);
-
-      var decalage = (new Date(annee, mois, 1).getDay() + 6) % 7; // lundi = 0
-      var nbJours = new Date(annee, mois + 1, 0).getDate();
-
-      var jour = 1;
-      for (var ligne = 0; ligne < 6 && jour <= nbJours; ligne++) {
-        var tr = document.createElement("tr");
-        for (var col = 0; col < 7; col++) {
-          var td = document.createElement("td");
-          if ((ligne === 0 && col < decalage) || jour > nbJours) {
-            td.className = "vide";
-          } else {
-            var d = new Date(annee, mois, jour);
-            td.textContent = jour;
-            if (d < aujourdhui) {
-              td.className = "passe";
-            } else if (estReserve(d)) {
-              td.className = "reserve";
-            } else {
-              td.className = "libre";
-            }
-            jour++;
-          }
-          tr.appendChild(td);
-        }
-        table.appendChild(tr);
-      }
-      div.appendChild(table);
-      return div;
+    function estReserve(ds) {
+      return (reservations[logementActif] || []).indexOf(ds) !== -1;
     }
 
     function afficheCalendrier() {
-      var cal = document.getElementById("cal");
-      cal.innerHTML = "";
-      var maintenant = new Date();
-      var aujourdhui = new Date(maintenant.getFullYear(), maintenant.getMonth(), maintenant.getDate());
-      var annee = maintenant.getFullYear();
-      var mois = maintenant.getMonth();
-      for (var i = 0; i < NB_MOIS; i++) {
-        cal.appendChild(construitMois(annee, mois, aujourdhui));
-        mois++;
-        if (mois > 11) { mois = 0; annee++; }
-      }
+      calGenere(document.getElementById("cal"), 6, estReserve, null);
     }
 
     document.getElementById("choix").addEventListener("click", function (e) {
