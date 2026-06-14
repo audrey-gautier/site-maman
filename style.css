@@ -251,6 +251,24 @@ a {
   margin-bottom: 0;
 }
 
+.tarifs {
+  border-collapse: collapse;
+  margin: 0.5rem 0 1rem;
+  min-width: 280px;
+}
+
+.tarifs th,
+.tarifs td {
+  border: 1px solid var(--bleu-bordure);
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+
+.tarifs th {
+  background: var(--bleu-ciel);
+  color: var(--bleu-fonce);
+}
+
 .table-lits {
   border-collapse: collapse;
   margin: 0.5rem 0;
