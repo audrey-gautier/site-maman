@@ -269,6 +269,12 @@ a {
   color: var(--bleu-fonce);
 }
 
+.tarifs-note {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0.25rem 0;
+}
+
 .table-lits {
   border-collapse: collapse;
   margin: 0.5rem 0;
