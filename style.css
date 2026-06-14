@@ -221,6 +221,24 @@ a {
   font-weight: 600;
 }
 
+#regles .regle-titre {
+  cursor: pointer;
+  user-select: none;
+}
+
+#regles .regle-titre::after {
+  content: " ▾";
+  font-size: 0.8em;
+}
+
+#regles .regle.replie .regle-titre::after {
+  content: " ▸";
+}
+
+#regles .regle.replie .regle-contenu {
+  display: none;
+}
+
 .regle-contenu {
   flex: 1;
 }

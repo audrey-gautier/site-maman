@@ -424,6 +424,20 @@
         }
       })(categories[i]);
     }
+
+    var regles = document.querySelectorAll("#regles .regle");
+    for (var j = 0; j < regles.length; j++) {
+      (function (regle, idx) {
+        // Arrivée et Départ (les 2 premières) restent dépliés par défaut
+        if (idx >= 2) regle.classList.add("replie");
+        var titre = regle.querySelector(".regle-titre");
+        if (titre) {
+          titre.addEventListener("click", function () {
+            regle.classList.toggle("replie");
+          });
+        }
+      })(regles[j], j);
+    }
   </script>
 </body>
 </html>
