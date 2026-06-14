@@ -37,6 +37,8 @@
 
       <div class="onglets sous-onglets" id="sous-onglets"></div>
 
+      <div id="galerie-intro"></div>
+
       <div class="galerie" id="galerie"></div>
     </section>
   </main>
@@ -48,6 +50,43 @@
   <footer>
     <p>&copy; 2026 — Lou Pitchou Prats et Maison Prats</p>
   </footer>
+
+  <template id="tpl-petitdej">
+    <div class="menu-pdj">
+      <h3 class="menu-pdj-titre">Choix du petit déjeuner</h3>
+      <div class="menu-pdj-cols">
+        <div>
+          <h4>Boissons</h4>
+          <ul>
+            <li>Café noir ou au lait</li>
+            <li>Thé</li>
+            <li>Chocolat au lait</li>
+            <li>Lait (chaud / froid)</li>
+            <li>Oranges pressées</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Mini viennoiseries</h4>
+          <ul>
+            <li>Chocolatine (pain au chocolat)</li>
+            <li>Croissant</li>
+            <li>Petit pain</li>
+            <li>Pain de mie (grillé ou non)</li>
+            <li>Pancakes maison</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Autres</h4>
+          <ul>
+            <li>Yaourt</li>
+            <li>Jambon de pays</li>
+            <li>Fromage</li>
+            <li>Œufs / Bacon</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </template>
 
   <script>
     // === À REMPLIR ===
@@ -97,7 +136,7 @@
         { src: "exterieur/exterieur-10.jpg", alt: "Extérieur" }
       ] },
       piscine:   { type: "simple", photos: [] },
-      petitdej:  { type: "simple", photos: [
+      petitdej:  { type: "simple", introTemplate: "tpl-petitdej", photos: [
         { src: "petit-dejeuner/petit-dejeuner-01.jpg", alt: "Petit déjeuner" }
       ] }
     };
@@ -126,7 +165,9 @@
     function afficheGalerie() {
       var cat = galeries[categorieActive];
       var sous = document.getElementById("sous-onglets");
+      var intro = document.getElementById("galerie-intro");
       sous.innerHTML = "";
+      intro.innerHTML = "";
       if (cat.type === "groupes") {
         sous.style.display = "flex";
         cat.groupes.forEach(function (groupe, idx) {
@@ -143,6 +184,10 @@
         rendPhotos(cat.groupes[sousOngletActif].photos);
       } else {
         sous.style.display = "none";
+        if (cat.introTemplate) {
+          var tpl = document.getElementById(cat.introTemplate);
+          if (tpl) intro.appendChild(tpl.content.cloneNode(true));
+        }
         rendPhotos(cat.photos);
       }
     }
