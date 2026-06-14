@@ -10,15 +10,34 @@
 <body>
   <header>
     <h1>Disponibilités</h1>
-    <p class="sous-titre">Page privée — gestion des réservations</p>
+    <p class="sous-titre">Espace privé</p>
   </header>
 
   <main>
-    <section id="admin">
+    <section id="admin-login">
+      <h2>Connexion</h2>
+      <form id="form-login" autocomplete="off">
+        <p>
+          <label for="login-user">Identifiant</label><br />
+          <input type="text" id="login-user" />
+        </p>
+        <p>
+          <label for="login-pass">Mot de passe</label><br />
+          <input type="password" id="login-pass" />
+        </p>
+        <button type="submit">Se connecter</button>
+        <span id="login-erreur" class="login-erreur" style="display:none;">
+          Identifiant ou mot de passe incorrect.
+        </span>
+      </form>
+      <p><a href="index.html">← Retour au site</a></p>
+    </section>
+
+    <section id="admin-contenu" style="display:none;">
       <p class="admin-info">
         Choisissez un logement, puis <strong>cliquez sur un jour</strong> pour le
         bloquer (rouge) ou le débloquer. Vos modifications sont enregistrées
-        automatiquement sur cet ordinateur et apparaissent dans
+        automatiquement et apparaissent dans
         <a href="calendrier.html">le calendrier du site</a>.
       </p>
 
@@ -36,8 +55,9 @@
       <div id="cal"></div>
 
       <div class="admin-actions">
-        <button type="button" id="publier">Publier (copier le code)</button>
+        <button type="button" id="publier">Exporter le code (publication)</button>
         <button type="button" id="reinit">Réinitialiser depuis la version publiée</button>
+        <button type="button" id="deconnexion">Se déconnecter</button>
       </div>
 
       <p class="admin-info" id="publier-aide" style="display:none;">
@@ -56,6 +76,11 @@
   <script src="reservations.js"></script>
   <script src="calendrier.js"></script>
   <script>
+    // ===== IDENTIFIANTS ADMIN =====
+    // À remplacer par vos identifiants (donnés par Audrey).
+    var ADMIN_USER = "admin";
+    var ADMIN_PASS = "changeme";
+
     var reservations = calChargeReservations();
     ["gite", "chambre1", "chambre2"].forEach(function (k) {
       if (!reservations[k]) reservations[k] = [];
@@ -115,7 +140,33 @@
       affiche();
     });
 
-    affiche();
+    document.getElementById("deconnexion").addEventListener("click", function () {
+      sessionStorage.removeItem("admin-auth");
+      location.reload();
+    });
+
+    function ouvrirAdmin() {
+      document.getElementById("admin-login").style.display = "none";
+      document.getElementById("admin-contenu").style.display = "block";
+      affiche();
+    }
+
+    document.getElementById("form-login").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var u = document.getElementById("login-user").value;
+      var p = document.getElementById("login-pass").value;
+      if (u === ADMIN_USER && p === ADMIN_PASS) {
+        sessionStorage.setItem("admin-auth", "1");
+        document.getElementById("login-erreur").style.display = "none";
+        ouvrirAdmin();
+      } else {
+        document.getElementById("login-erreur").style.display = "inline";
+      }
+    });
+
+    if (sessionStorage.getItem("admin-auth") === "1") {
+      ouvrirAdmin();
+    }
   </script>
 </body>
 </html>

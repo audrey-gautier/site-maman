@@ -494,6 +494,38 @@ table.cal {
   color: var(--bleu-accent);
 }
 
+.bouton-admin {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--bleu-accent);
+  border: 1px solid var(--bleu-bordure);
+  border-radius: 6px;
+  padding: 0.2rem 0.7rem;
+  text-decoration: none;
+}
+
+#admin-login input {
+  padding: 0.4rem;
+  font: inherit;
+  min-width: 220px;
+}
+
+#admin-login button {
+  font: inherit;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--bleu-accent);
+  background: var(--bleu-accent);
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.login-erreur {
+  color: #842029;
+  margin-left: 0.5rem;
+}
+
 footer {
   text-align: center;
   padding: 1.5rem;
