@@ -410,5 +410,20 @@
   <footer>
     <p>&copy; 2026 — Lou Pitchou Prats et Maison Prats</p>
   </footer>
+
+  <script>
+    var categories = document.querySelectorAll("#equipements .categorie");
+    for (var i = 0; i < categories.length; i++) {
+      (function (cat) {
+        cat.classList.add("replie");
+        var titre = cat.querySelector("h3");
+        if (titre) {
+          titre.addEventListener("click", function () {
+            cat.classList.toggle("replie");
+          });
+        }
+      })(categories[i]);
+    }
+  </script>
 </body>
 </html>

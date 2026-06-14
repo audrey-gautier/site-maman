@@ -148,6 +148,25 @@ a {
   color: var(--bleu-fonce);
 }
 
+#equipements .categorie h3 {
+  cursor: pointer;
+  user-select: none;
+}
+
+#equipements .categorie h3::after {
+  content: " ▾";
+  font-size: 0.8em;
+}
+
+#equipements .categorie.replie h3::after {
+  content: " ▸";
+}
+
+#equipements .categorie.replie ul,
+#equipements .categorie.replie p.note {
+  display: none;
+}
+
 .categorie p.note {
   font-size: 0.85rem;
   color: #666;
