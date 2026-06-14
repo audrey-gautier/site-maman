@@ -537,6 +537,27 @@ table.cal {
   margin-left: 0.5rem;
 }
 
+.form-tarifs label {
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.form-tarifs input {
+  width: 100%;
+  padding: 0.4rem;
+  font: inherit;
+}
+
+.form-tarifs h3 {
+  color: var(--bleu-fonce);
+  margin: 1rem 0 0.3rem;
+}
+
+.tarifs-message {
+  margin-left: 0.5rem;
+  color: var(--bleu-accent);
+}
+
 footer {
   text-align: center;
   padding: 1.5rem;

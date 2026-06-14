@@ -33,15 +33,15 @@
         </tr>
         <tr>
           <td>Basse saison</td>
-          <td>75 € / nuit</td>
+          <td id="aff-gite-basse">75 € / nuit</td>
         </tr>
         <tr>
           <td>Haute saison</td>
-          <td>90 € / nuit</td>
+          <td id="aff-gite-haute">90 € / nuit</td>
         </tr>
       </table>
-      <p class="tarifs-note">Pour 4 à 5 personnes — minimum 2 nuits.</p>
-      <p class="tarifs-note">Paiement&nbsp;: chèques, espèces, carte bleue.</p>
+      <p class="tarifs-note" id="aff-gite-conditions">Pour 4 à 5 personnes — minimum 2 nuits.</p>
+      <p class="tarifs-note" id="aff-paiement">Paiement&nbsp;: chèques, espèces, carte bleue.</p>
       <p>
         Pour réserver le gîte,
         <a href="index.html#contact">contactez-nous</a>.
@@ -57,14 +57,14 @@
         </tr>
         <tr>
           <td>Basse saison</td>
-          <td>60 € / nuit, petit déjeuner inclus</td>
+          <td id="aff-ch-basse">60 € / nuit, petit déjeuner inclus</td>
         </tr>
         <tr>
           <td>Haute saison</td>
-          <td>60 € / nuit, petit déjeuner inclus</td>
+          <td id="aff-ch-haute">60 € / nuit, petit déjeuner inclus</td>
         </tr>
       </table>
-      <p class="tarifs-note">
+      <p class="tarifs-note" id="aff-ch-repas">
         Un repas du soir peut être préparé sur demande faite à l'avance, au
         prix de 15&nbsp;€.
       </p>
@@ -78,5 +78,30 @@
   <footer>
     <p>&copy; 2026 — Lou Pitchou Prats et Maison Prats</p>
   </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script>
+    var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    var CLES_TARIFS = {
+      "gite_basse": "aff-gite-basse",
+      "gite_haute": "aff-gite-haute",
+      "gite_conditions": "aff-gite-conditions",
+      "paiement": "aff-paiement",
+      "ch_basse": "aff-ch-basse",
+      "ch_haute": "aff-ch-haute",
+      "ch_repas": "aff-ch-repas"
+    };
+    sb.from("tarifs").select("cle,valeur").then(function (res) {
+      if (res.error || !res.data) return;
+      res.data.forEach(function (r) {
+        var id = CLES_TARIFS[r.cle];
+        if (id && r.valeur) {
+          var el = document.getElementById(id);
+          if (el) el.textContent = r.valeur;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
