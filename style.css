@@ -583,6 +583,16 @@ table.cal {
   font-size: 0.9rem;
 }
 
+.panneau-attention {
+  max-width: 640px;
+  margin: 0 auto 2rem;
+  padding: 0.8rem 1rem;
+  background: #fff4e5;
+  border: 1px solid #f0c27a;
+  border-radius: 8px;
+  color: #7a4e00;
+}
+
 footer {
   text-align: center;
   padding: 1.5rem;
