@@ -229,6 +229,15 @@
     });
 
     afficheGalerie();
+
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var cat = params.get("cat");
+      if (cat) {
+        var btn = document.querySelector('#onglets-photos button[data-cat="' + cat + '"]');
+        if (btn) btn.click();
+      }
+    })();
   </script>
 </body>
 </html>
