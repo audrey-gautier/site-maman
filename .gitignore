@@ -4,3 +4,4 @@ Thumbs.db
 
 # Configuration locale de l'éditeur / Claude
 .claude/settings.local.json
+.claude/launch.json
