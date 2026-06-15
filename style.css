@@ -558,6 +558,31 @@ table.cal {
   color: var(--bleu-accent);
 }
 
+.points-forts-detail {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem 1.5rem;
+}
+
+.points-forts-detail li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.pf-icone {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.pf-desc {
+  color: #555;
+  font-size: 0.9rem;
+}
+
 footer {
   text-align: center;
   padding: 1.5rem;
