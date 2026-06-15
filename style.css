@@ -583,6 +583,30 @@ table.cal {
   font-size: 0.9rem;
 }
 
+.apercu-galerie {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.apercu-galerie img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.lien-photos {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bleu-accent);
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
 .panneau-attention {
   max-width: 640px;
   margin: 0 auto 2rem;
