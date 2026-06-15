@@ -558,6 +558,41 @@ table.cal {
   color: var(--bleu-accent);
 }
 
+.points-forts-detail {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem 1.5rem;
+}
+
+.points-forts-detail li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.pf-icone {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.pf-desc {
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.panneau-attention {
+  max-width: 640px;
+  margin: 0 auto 2rem;
+  padding: 0.8rem 1rem;
+  background: #fff4e5;
+  border: 1px solid #f0c27a;
+  border-radius: 8px;
+  color: #7a4e00;
+}
+
 footer {
   text-align: center;
   padding: 1.5rem;
