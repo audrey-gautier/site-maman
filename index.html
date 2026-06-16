@@ -22,6 +22,7 @@
     <a href="a-proximite.html">🌳 À proximité</a>
     <a href="calendrier.html">📅 Calendrier</a>
     <a href="photos.html">📷 Photos</a>
+    <a href="contact.html">✉️ Contact</a>
   </nav>
 
   <main>
@@ -48,23 +49,6 @@
       </div>
     </section>
 
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>Danièle et Christian</p>
-      <p>Email&nbsp;: <a href="mailto:mesange40@hotmail.fr">mesange40@hotmail.fr</a></p>
-      <p>Téléphone&nbsp;: <a href="tel:+33674991242">06.74.99.12.42</a></p>
-
-      <h3>Nous écrire</h3>
-      <form id="form-contact" class="form-contact" autocomplete="off">
-        <label>Nom<br /><input type="text" id="c-nom" required /></label>
-        <label>Email<br /><input type="email" id="c-email" required /></label>
-        <label>Téléphone<br /><input type="text" id="c-tel" /></label>
-        <label>Dates souhaitées<br /><input type="text" id="c-dates" placeholder="ex. du 10 au 17 juillet" /></label>
-        <label>Message<br /><textarea id="c-message" rows="4" required></textarea></label>
-        <button type="submit">Envoyer</button>
-        <span id="c-retour" class="form-retour"></span>
-      </form>
-    </section>
   </main>
 
   <footer>
@@ -72,33 +56,5 @@
   </footer>
 
   <a href="admin.html" class="bouton-admin" aria-label="Admin">Admin</a>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-  <script>
-    var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    document.getElementById("form-contact").addEventListener("submit", function (e) {
-      e.preventDefault();
-      var retour = document.getElementById("c-retour");
-      retour.className = "form-retour";
-      retour.textContent = "Envoi…";
-      sb.from("demandes").insert({
-        nom: document.getElementById("c-nom").value,
-        email: document.getElementById("c-email").value,
-        telephone: document.getElementById("c-tel").value,
-        dates: document.getElementById("c-dates").value,
-        message: document.getElementById("c-message").value
-      }).then(function (res) {
-        if (res.error) {
-          retour.className = "form-retour erreur";
-          retour.textContent = "Erreur : " + res.error.message;
-          return;
-        }
-        e.target.reset();
-        retour.className = "form-retour succes";
-        retour.textContent = "Merci ! Votre message a bien été envoyé.";
-      });
-    });
-  </script>
 </body>
 </html>
