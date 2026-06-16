@@ -204,6 +204,21 @@
       });
     });
 
+    function majTraitee(id, valeur) {
+      sb.from("demandes").update({ traitee: valeur }).eq("id", id).then(function (res) {
+        if (res.error) { alert("Erreur : " + res.error.message); return; }
+        chargeMessages();
+      });
+    }
+
+    function supprimeMessage(id) {
+      if (!confirm("Supprimer définitivement ce message ?")) return;
+      sb.from("demandes").delete().eq("id", id).then(function (res) {
+        if (res.error) { alert("Erreur : " + res.error.message); return; }
+        chargeMessages();
+      });
+    }
+
     function chargeMessages() {
       var c = document.getElementById("liste-messages");
       c.innerHTML = "";
@@ -218,7 +233,12 @@
         }
         res.data.forEach(function (d) {
           var div = document.createElement("div");
-          div.className = "message-item";
+          div.className = "message-item" + (d.traitee ? " est-traitee" : "");
+
+          var statut = document.createElement("span");
+          statut.className = "msg-statut " + (d.traitee ? "oui" : "non");
+          statut.textContent = "Traitée : " + (d.traitee ? "OUI" : "NON");
+          div.appendChild(statut);
 
           var nom = document.createElement("strong");
           nom.textContent = d.nom || "(sans nom)";
@@ -245,6 +265,27 @@
           m.textContent = d.message || "";
           div.appendChild(m);
 
+          var actions = document.createElement("div");
+          actions.className = "msg-actions";
+
+          var btnTraitee = document.createElement("button");
+          btnTraitee.type = "button";
+          btnTraitee.textContent = d.traitee ? "Marquer non traitée" : "Marquer traitée";
+          (function (id, val) {
+            btnTraitee.addEventListener("click", function () { majTraitee(id, val); });
+          })(d.id, !d.traitee);
+          actions.appendChild(btnTraitee);
+
+          var btnSuppr = document.createElement("button");
+          btnSuppr.type = "button";
+          btnSuppr.className = "btn-suppr";
+          btnSuppr.textContent = "Supprimer";
+          (function (id) {
+            btnSuppr.addEventListener("click", function () { supprimeMessage(id); });
+          })(d.id);
+          actions.appendChild(btnSuppr);
+
+          div.appendChild(actions);
           c.appendChild(div);
         });
       });
