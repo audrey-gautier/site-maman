@@ -42,7 +42,7 @@
         </tr>
       </table>
       <p class="tarifs-note" id="aff-gite-conditions">Pour 4 à 5 personnes — minimum 2 nuits.</p>
-      <p class="tarifs-note" id="aff-paiement">Paiement&nbsp;: chèques, espèces, carte bleue.</p>
+      <p class="tarifs-note aff-paiement">Paiement&nbsp;: chèques, espèces, carte bleue.</p>
       <p>
         Pour réserver le gîte,
         <a href="index.html#contact">contactez-nous</a>.
@@ -69,6 +69,7 @@
         Un repas du soir peut être préparé sur demande faite à l'avance, au
         prix de 15&nbsp;€.
       </p>
+      <p class="tarifs-note aff-paiement">Paiement&nbsp;: chèques, espèces, carte bleue.</p>
       <p>
         Pour réserver une chambre d'hôtes,
         <a href="index.html#contact">contactez-nous</a>.
@@ -88,7 +89,6 @@
       "gite_basse": "aff-gite-basse",
       "gite_haute": "aff-gite-haute",
       "gite_conditions": "aff-gite-conditions",
-      "paiement": "aff-paiement",
       "ch_basse": "aff-ch-basse",
       "ch_haute": "aff-ch-haute",
       "ch_repas": "aff-ch-repas"
@@ -96,8 +96,14 @@
     sb.from("tarifs").select("cle,valeur").then(function (res) {
       if (res.error || !res.data) return;
       res.data.forEach(function (r) {
+        if (!r.valeur) return;
+        if (r.cle === "paiement") {
+          var elems = document.querySelectorAll(".aff-paiement");
+          for (var i = 0; i < elems.length; i++) elems[i].textContent = r.valeur;
+          return;
+        }
         var id = CLES_TARIFS[r.cle];
-        if (id && r.valeur) {
+        if (id) {
           var el = document.getElementById(id);
           if (el) el.textContent = r.valeur;
         }
