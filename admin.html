@@ -37,6 +37,7 @@
       <div class="choix-logement" id="admin-onglets">
         <button type="button" data-panel="calendrier" class="actif">Calendrier</button>
         <button type="button" data-panel="tarifs">Tarifs</button>
+        <button type="button" data-panel="messages">Messages</button>
       </div>
 
       <div id="panel-calendrier">
@@ -85,6 +86,11 @@
             <span id="t-message" class="tarifs-message"></span>
           </div>
         </form>
+      </div>
+
+      <div id="panel-messages" style="display:none;">
+        <p class="admin-info">Les demandes reçues via le formulaire de contact du site.</p>
+        <div id="liste-messages"></div>
       </div>
 
       <div class="admin-actions">
@@ -198,15 +204,63 @@
       });
     });
 
+    function chargeMessages() {
+      var c = document.getElementById("liste-messages");
+      c.innerHTML = "";
+      sb.from("demandes").select("*").order("cree_le", { ascending: false }).then(function (res) {
+        if (res.error) { c.textContent = "Erreur : " + res.error.message; return; }
+        if (!res.data || !res.data.length) {
+          var vide = document.createElement("p");
+          vide.className = "galerie-vide";
+          vide.textContent = "Aucune demande pour l'instant.";
+          c.appendChild(vide);
+          return;
+        }
+        res.data.forEach(function (d) {
+          var div = document.createElement("div");
+          div.className = "message-item";
+
+          var nom = document.createElement("strong");
+          nom.textContent = d.nom || "(sans nom)";
+          div.appendChild(nom);
+
+          var coord = document.createElement("div");
+          coord.className = "msg-coord";
+          coord.textContent = [d.email, d.telephone].filter(Boolean).join(" — ");
+          div.appendChild(coord);
+
+          if (d.dates) {
+            var dd = document.createElement("div");
+            dd.className = "msg-coord";
+            dd.textContent = "Dates : " + d.dates;
+            div.appendChild(dd);
+          }
+
+          var dt = document.createElement("div");
+          dt.className = "msg-date";
+          dt.textContent = d.cree_le ? new Date(d.cree_le).toLocaleString("fr-FR") : "";
+          div.appendChild(dt);
+
+          var m = document.createElement("p");
+          m.textContent = d.message || "";
+          div.appendChild(m);
+
+          c.appendChild(div);
+        });
+      });
+    }
+
     document.getElementById("admin-onglets").addEventListener("click", function (e) {
       if (e.target.tagName !== "BUTTON") return;
       var panel = e.target.getAttribute("data-panel");
-      document.getElementById("panel-calendrier").style.display = (panel === "calendrier") ? "block" : "none";
-      document.getElementById("panel-tarifs").style.display = (panel === "tarifs") ? "block" : "none";
+      ["calendrier", "tarifs", "messages"].forEach(function (p) {
+        document.getElementById("panel-" + p).style.display = (p === panel) ? "block" : "none";
+      });
       var boutons = this.querySelectorAll("button");
       for (var i = 0; i < boutons.length; i++) {
         boutons[i].classList.toggle("actif", boutons[i] === e.target);
       }
+      if (panel === "messages") chargeMessages();
     });
 
     function ouvrirAdmin() {

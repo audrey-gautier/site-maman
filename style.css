@@ -537,6 +537,60 @@ table.cal {
   margin-left: 0.5rem;
 }
 
+.form-contact label {
+  display: block;
+  margin: 0.6rem 0;
+}
+
+.form-contact input,
+.form-contact textarea {
+  width: 100%;
+  padding: 0.4rem;
+  font: inherit;
+}
+
+.form-contact button {
+  font: inherit;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid var(--bleu-accent);
+  background: var(--bleu-accent);
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.form-retour {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.form-retour.succes {
+  color: #2e8b57;
+}
+
+.form-retour.erreur {
+  color: #842029;
+}
+
+.message-item {
+  border: 1px solid var(--bleu-bordure);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.msg-coord {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.msg-date {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 0.2rem;
+}
+
 .form-tarifs label {
   display: block;
   margin: 0.5rem 0;
