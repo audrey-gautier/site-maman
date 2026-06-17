@@ -295,6 +295,18 @@ a {
   color: var(--bleu-fonce);
 }
 
+.a-completer {
+  background: #fff3bf;
+  color: #8a6d00;
+  font-weight: 600;
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+}
+
+.mentions h2 {
+  margin-top: 1.8rem;
+}
+
 .tarifs-note {
   font-size: 0.9rem;
   color: #555;
@@ -822,4 +834,13 @@ footer::before {
   background-size: 100% 28px;
   background-repeat: no-repeat;
   background-position: top;
+}
+
+.footer-liens {
+  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+}
+
+.footer-liens a {
+  color: var(--bleu-fonce);
 }
