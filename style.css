@@ -472,6 +472,16 @@ table.cal {
   color: #555;
 }
 
+.admin-stats {
+  display: inline-block;
+  font-weight: 500;
+  color: var(--bleu-fonce);
+  background: var(--bleu-ciel);
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  margin: 0 0 0.5rem;
+}
+
 .admin-actions {
   display: flex;
   flex-wrap: wrap;
