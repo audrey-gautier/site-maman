@@ -325,6 +325,28 @@ a {
   color: var(--bleu-accent);
 }
 
+.liens-utiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+
+.liens-utiles a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: var(--bleu-ciel);
+  color: var(--bleu-fonce);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.liens-utiles a:hover {
+  background: var(--bleu-accent);
+  color: #fff;
+}
+
 .table-lits {
   border-collapse: collapse;
   margin: 0.5rem 0;
