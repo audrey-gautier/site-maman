@@ -58,13 +58,14 @@
       var retour = document.getElementById("c-retour");
       retour.className = "form-retour";
       retour.textContent = "Envoi…";
-      sb.from("demandes").insert({
+      var donnees = {
         nom: document.getElementById("c-nom").value,
         email: document.getElementById("c-email").value,
         telephone: document.getElementById("c-tel").value,
         dates: document.getElementById("c-dates").value,
         message: document.getElementById("c-message").value
-      }).then(function (res) {
+      };
+      sb.from("demandes").insert(donnees).then(function (res) {
         if (res.error) {
           retour.className = "form-retour erreur";
           retour.textContent = "Erreur : " + res.error.message;
@@ -73,6 +74,8 @@
         e.target.reset();
         retour.className = "form-retour succes";
         retour.textContent = "Merci ! Votre message a bien été envoyé.";
+        // Notifier par email (sans bloquer l'utilisateur si ça échoue)
+        sb.functions.invoke("notifier-message", { body: { record: donnees } }).catch(function () {});
       });
     });
   </script>
