@@ -300,6 +300,31 @@ a {
   margin: 0.25rem 0;
 }
 
+.tarifs-note.note-chiens {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--bleu-fonce);
+}
+
+.liste-tirets {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.5rem 0 1rem;
+}
+
+.liste-tirets li {
+  padding-left: 1.2rem;
+  position: relative;
+  margin-bottom: 0.3rem;
+}
+
+.liste-tirets li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  color: var(--bleu-accent);
+}
+
 .table-lits {
   border-collapse: collapse;
   margin: 0.5rem 0;
@@ -747,10 +772,10 @@ table.cal {
   max-width: 640px;
   margin: 0 auto 2rem;
   padding: 0.8rem 1rem;
-  background: #fff4e5;
-  border: 1px solid #f0c27a;
+  background: #f0f8fc;
+  border: 1px solid var(--bleu-bordure);
   border-radius: 8px;
-  color: #7a4e00;
+  color: var(--bleu-fonce);
 }
 
 footer {
