@@ -307,6 +307,12 @@ a {
   margin-top: 1.8rem;
 }
 
+.credit-site {
+  font-style: italic;
+  font-size: 0.8rem;
+  color: #888;
+}
+
 .tarifs-note {
   font-size: 0.9rem;
   color: #555;
