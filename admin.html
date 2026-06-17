@@ -34,6 +34,7 @@
     </section>
 
     <section id="admin-contenu" style="display:none;">
+      <p class="admin-stats" id="admin-stats"></p>
       <div class="choix-logement" id="admin-onglets">
         <button type="button" data-panel="calendrier" class="actif">Calendrier</button>
         <button type="button" data-panel="tarifs">Tarifs</button>
@@ -304,11 +305,20 @@
       if (panel === "messages") chargeMessages();
     });
 
+    function chargeStats() {
+      sb.from("compteur").select("total").eq("id", 1).single().then(function (res) {
+        var el = document.getElementById("admin-stats");
+        if (res.error || !res.data) { el.textContent = ""; return; }
+        el.textContent = "👀 Visites du site : " + res.data.total;
+      });
+    }
+
     function ouvrirAdmin() {
       document.getElementById("admin-login").style.display = "none";
       document.getElementById("admin-contenu").style.display = "block";
       chargeEtAffiche();
       chargeTarifs();
+      chargeStats();
     }
 
     document.getElementById("form-login").addEventListener("submit", function (e) {
