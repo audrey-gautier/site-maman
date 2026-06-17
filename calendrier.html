@@ -69,7 +69,7 @@
     }
 
     function afficheCalendrier() {
-      calGenere(document.getElementById("cal"), 6, estReserve, null);
+      calGenere(document.getElementById("cal"), 7, estReserve, null);
     }
 
     document.getElementById("choix").addEventListener("click", function (e) {
@@ -83,6 +83,15 @@
     });
 
     afficheCalendrier();
+
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var logement = params.get("logement");
+      if (logement) {
+        var btn = document.querySelector('#choix button[data-logement="' + logement + '"]');
+        if (btn) btn.click();
+      }
+    })();
 
     sb.from("reservations").select("logement,jour").then(function (res) {
       if (res.error) { console.error(res.error); return; }

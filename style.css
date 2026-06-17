@@ -300,7 +300,8 @@ a {
   margin: 0.25rem 0;
 }
 
-.tarifs-note.note-chiens {
+.tarifs-note.note-chiens,
+.tarifs-note.note-importante {
   font-size: 1.05rem;
   font-weight: 600;
   color: var(--bleu-fonce);
