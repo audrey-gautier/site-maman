@@ -506,6 +506,46 @@ a {
   border-radius: 8px;
 }
 
+.lightbox-fermer,
+.lightbox-nav {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 1.8rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-fermer:hover,
+.lightbox-nav:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.lightbox-fermer {
+  top: 1rem;
+  right: 1rem;
+}
+
+.lightbox-nav {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightbox-prec {
+  left: 1rem;
+}
+
+.lightbox-suiv {
+  right: 1rem;
+}
+
 .choix-logement,
 .onglets {
   display: flex;
@@ -725,7 +765,8 @@ table.cal {
 }
 
 .form-contact input,
-.form-contact textarea {
+.form-contact textarea,
+.form-contact select {
   width: 100%;
   padding: 0.4rem;
   font: inherit;
@@ -753,6 +794,12 @@ table.cal {
 
 .form-retour.erreur {
   color: #842029;
+}
+
+.form-rgpd {
+  margin-top: 1rem;
+  color: #666;
+  line-height: 1.4;
 }
 
 .message-item {
