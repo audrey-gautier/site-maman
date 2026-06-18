@@ -41,6 +41,9 @@
 
       <h3>Nous écrire</h3>
       <form id="form-contact" class="form-contact" autocomplete="off">
+        <div class="champ-cache" aria-hidden="true">
+          <label>Ne pas remplir ce champ<br /><input type="text" id="c-site" tabindex="-1" autocomplete="off" /></label>
+        </div>
         <label>Nom et prénom *<br /><input type="text" id="c-nom" required /></label>
         <label>Email *<br /><input type="email" id="c-email" required /></label>
         <label>Téléphone<br /><input type="tel" id="c-tel" /></label>
@@ -76,6 +79,12 @@
     var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     document.getElementById("form-contact").addEventListener("submit", function (e) {
       e.preventDefault();
+      // Piège anti-robot : ce champ est invisible pour les humains.
+      // S'il est rempli, c'est un robot → on ignore silencieusement l'envoi.
+      if (document.getElementById("c-site").value) {
+        e.target.reset();
+        return;
+      }
       var retour = document.getElementById("c-retour");
       retour.className = "form-retour";
       retour.textContent = "Envoi…";
