@@ -802,6 +802,14 @@ table.cal {
   line-height: 1.4;
 }
 
+.champ-cache {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .message-item {
   border: 1px solid var(--bleu-bordure);
   border-radius: 8px;
