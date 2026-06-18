@@ -30,6 +30,7 @@
   <main>
     <section id="photos">
       <h2>Galerie</h2>
+      <p class="aide-clic">👆 Cliquez sur une photo pour l'agrandir.</p>
 
       <div class="onglets" id="onglets-photos">
         <button type="button" data-cat="gite" class="actif">Gîte</button>
@@ -43,11 +44,19 @@
       <div id="galerie-intro"></div>
 
       <div class="galerie" id="galerie"></div>
+
+      <p class="liens-utiles">
+        <a href="contact.html">✉️ Réserver</a>
+        <a href="calendrier.html">📅 Voir les disponibilités</a>
+      </p>
     </section>
   </main>
 
   <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button type="button" class="lightbox-fermer" id="lightbox-fermer" aria-label="Fermer">✕</button>
+    <button type="button" class="lightbox-nav lightbox-prec" id="lightbox-prec" aria-label="Photo précédente">‹</button>
     <img id="lightbox-img" src="" alt="" />
+    <button type="button" class="lightbox-nav lightbox-suiv" id="lightbox-suiv" aria-label="Photo suivante">›</button>
   </div>
 
   <footer>
@@ -215,10 +224,20 @@
 
     var lightbox = document.getElementById("lightbox");
     var lightboxImg = document.getElementById("lightbox-img");
+    var photosLightbox = [];
+    var indexLightbox = 0;
 
-    function ouvreLightbox(src, alt) {
-      lightboxImg.src = src;
-      lightboxImg.alt = alt || "";
+    function montreLightbox() {
+      var p = photosLightbox[indexLightbox];
+      if (!p) return;
+      lightboxImg.src = p.src;
+      lightboxImg.alt = p.alt || "";
+      document.getElementById("lightbox-prec").style.visibility = indexLightbox > 0 ? "visible" : "hidden";
+      document.getElementById("lightbox-suiv").style.visibility = indexLightbox < photosLightbox.length - 1 ? "visible" : "hidden";
+    }
+
+    function ouvreLightbox() {
+      montreLightbox();
       lightbox.classList.add("ouvert");
     }
 
@@ -227,16 +246,34 @@
       lightboxImg.src = "";
     }
 
+    function lightboxPrec() {
+      if (indexLightbox > 0) { indexLightbox--; montreLightbox(); }
+    }
+
+    function lightboxSuiv() {
+      if (indexLightbox < photosLightbox.length - 1) { indexLightbox++; montreLightbox(); }
+    }
+
     document.getElementById("galerie").addEventListener("click", function (e) {
-      if (e.target.tagName === "IMG") {
-        ouvreLightbox(e.target.src, e.target.alt);
-      }
+      if (e.target.tagName !== "IMG") return;
+      var imgs = [].slice.call(this.querySelectorAll("img"));
+      photosLightbox = imgs.map(function (im) { return { src: im.src, alt: im.alt }; });
+      indexLightbox = imgs.indexOf(e.target);
+      ouvreLightbox();
     });
 
-    lightbox.addEventListener("click", fermeLightbox);
+    lightbox.addEventListener("click", function (e) {
+      if (e.target === lightbox) fermeLightbox();
+    });
+    document.getElementById("lightbox-fermer").addEventListener("click", fermeLightbox);
+    document.getElementById("lightbox-prec").addEventListener("click", lightboxPrec);
+    document.getElementById("lightbox-suiv").addEventListener("click", lightboxSuiv);
 
     document.addEventListener("keydown", function (e) {
+      if (!lightbox.classList.contains("ouvert")) return;
       if (e.key === "Escape") fermeLightbox();
+      else if (e.key === "ArrowLeft") lightboxPrec();
+      else if (e.key === "ArrowRight") lightboxSuiv();
     });
 
     afficheGalerie();
